@@ -3,7 +3,6 @@ interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   title: string;
   id: string;
   leftIcon?: any;
-  containerClass?: string;
   rightIcon?: any;
 }
 export default function Button({
