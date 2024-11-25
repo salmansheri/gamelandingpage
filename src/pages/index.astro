@@ -1,10 +1,18 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/hero.tsx";
+import About from "../components/about.tsx";
+import Navbar from "../components/navbar";
+import Features from "../components/features";
+import Story from "../components/story.tsx";
 ---
 
 <Layout title="Game">
   <main class="relative min-h-screen overflow-x-hidden">
+    <Navbar client:load />
     <Hero client:load />
+    <About client:load />
+    <Features client:load />
+    <Story />
   </main>
 </Layout>

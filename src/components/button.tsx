@@ -2,7 +2,7 @@ import { twMerge } from "tailwind-merge";
 interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   title: string;
   id: string;
-  leftIcon: any;
+  leftIcon?: any;
   containerClass?: string;
   rightIcon?: any;
 }

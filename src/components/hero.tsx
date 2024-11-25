@@ -1,8 +1,11 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Button from "./button";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { TiLocationArrow } from "react-icons/ti";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 export default function Hero() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [hasClicked, setHasClicked] = useState(false);
@@ -17,6 +20,13 @@ export default function Hero() {
     setCurrentIndex((prevIndex) => (prevIndex % totalVideos) + 1);
   }
 
+  useEffect(() => {
+    console.log("loaded");
+    if (loadedVideos === totalVideos - 1) {
+      setIsLoading(false);
+    }
+  });
+
   useGSAP(
     () => {
       if (hasClicked) {
@@ -28,7 +38,8 @@ export default function Hero() {
           height: "100%",
           duration: 1,
           ease: "power1.inOut",
-          onStart: () => nextVideoRef.current.play(),
+          // @ts-ignore
+          onStart: () => nextVideoRef?.current?.play(),
         });
         gsap.from("#current-video", {
           transformOrigin: "center center",
@@ -41,6 +52,24 @@ export default function Hero() {
     { dependencies: [currentIndex], revertOnUpdate: true },
   );
 
+  useGSAP(() => {
+    gsap.set("#video-frame", {
+      clipPath: "polygon(14% 0%, 72% 0%, 90% 90%, 0% 100%)",
+      borderRadius: "0 0 40% 10%",
+    });
+    gsap.from("#video-frame", {
+      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+      borderRadius: "0 0 0 0",
+      ease: "power1.inOut",
+      scrollTrigger: {
+        trigger: "#video-frame",
+        start: "center center",
+        end: "bottom center ",
+        scrub: true,
+      },
+    });
+  });
+
   const getVideoSrc = (index: any) => `videos/hero-${index}.mp4`;
   function handleVidoeLoad() {
     setLoadedVideos((prev) => prev + 1);
@@ -48,6 +77,15 @@ export default function Hero() {
 
   return (
     <div className="relative h-dvh w-screen overflow-x-hidden ">
+      {/*      {isLoading && (
+          <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-violet-50">
+            <div className="three-body">
+              <div className="three-body__dot" />
+              <div className="three-body__dot" />
+              <div className="three-body__dot" />
+            </div>
+          </div>
+        )}*/}
       <div
         className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75 "
         id="video-frame"
